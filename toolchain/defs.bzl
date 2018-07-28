@@ -6,7 +6,7 @@ def emcc_binary(name, memory_init_file=0,wasm=True,worker=False,linkopts=[], **k
         basename = name[:-5]
         includehtml = True
         includejs = True
-    elif name.endsith(".js"):
+    elif name.endswith(".js"):
         basename = name[:-3]
         includejs = True
     outputs = []
