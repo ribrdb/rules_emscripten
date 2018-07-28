@@ -1,0 +1,5 @@
+{
+  "name": "rules_emscripten",
+  "version": "0.0.1",
+  "description": "Bazel rules for emscripten",
+}

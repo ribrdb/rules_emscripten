@@ -1,0 +1,98 @@
+major_version: "1"
+minor_version: "0"
+default_target_cpu: "emscripten"
+toolchain {
+    toolchain_identifier: "emscripten-toolchain"
+    host_system_name: "i686-unknown-linux-gnu"
+    target_system_name: "emscripten-unknown-emscripten"
+    target_cpu: "emscripten"
+    target_libc: "unknown"
+    compiler: "emscripten"
+    abi_version: "unknown"
+    abi_libc_version: "unknown"
+    tool_path {
+      name: "gcc"
+      path: "emcc.sh"
+    }
+    tool_path {
+        name: "ld"
+        path: "emcc.sh"
+    }
+    tool_path {
+        name: "ar"
+        path: "/bin/false"
+    }
+    tool_path {
+        name: "cpp"
+        path: "/bin/false"
+    }
+    tool_path {
+        name: "gcov"
+        path: "/bin/false"
+    }
+    tool_path {
+        name: "nm"
+        path: "/bin/false"
+    }
+    tool_path {
+        name: "objdump"
+        path: "/bin/false"
+    }
+    tool_path {
+        name: "strip"
+        path: "/bin/false"
+    }
+
+    compiler_flag: "-isystem"
+    compiler_flag: "external/emscripten_toolchain/system/include/libcxx"
+    compiler_flag: "-isystem"
+    compiler_flag: "external/emscripten_toolchain/system/include/libc"
+    
+    # Turn off exceptions since emscripten has issues catching them
+    compiler_flag: "-fno-exceptions"
+
+    # Make C++ compilation deterministic. Use linkstamping instead of these
+    # compiler symbols.
+    unfiltered_cxx_flag: "-Wno-builtin-macro-redefined"
+    unfiltered_cxx_flag: "-D__DATE__=\"redacted\""
+    unfiltered_cxx_flag: "-D__TIMESTAMP__=\"redacted\""
+    unfiltered_cxx_flag: "-D__TIME__=\"redacted\""
+    # Enable coloring even if there's no attached terminal. Bazel removes the
+    # escape sequences if --nocolor is specified.
+    compiler_flag: "-fdiagnostics-color=always"
+      # All warnings are enabled. Maybe enable -Werror as well?
+    compiler_flag: "-Wall"
+        # Stamp the binary with a unique identifier.
+    linker_flag: "-Wl,--build-id=md5"
+    linker_flag: "-Wl,--hash-style=gnu"
+  
+    compilation_mode_flags {
+      mode: DBG
+      # Enable debug symbols.
+      compiler_flag: "-g"
+    }
+    compilation_mode_flags {
+      mode: FASTBUILD
+      # Enable debug symbols.
+      compiler_flag: "-g0"
+      compiler_flag: "-O0"
+      linker_flag: "-g0"
+      linker_flag: "-O0"
+    }
+    compilation_mode_flags {
+      mode: OPT
+  
+      # No debug symbols.
+      compiler_flag: "-g0"
+      linker_flag: "-g0"
+      compiler_flag: "-Oz"
+      linker_flag: "-Oz"
+  
+      # Disable assertions
+      compiler_flag: "-DNDEBUG"
+    }
+}
+default_toolchain {
+    cpu: "emscripten"
+    toolchain_identifier: "emscripten-toolchain"
+}

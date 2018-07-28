@@ -1,0 +1,9 @@
+*~
+\#*\#
+bazel-*
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.bazelrc
+
