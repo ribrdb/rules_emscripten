@@ -1,6 +1,7 @@
 major_version: "1"
 minor_version: "0"
 default_target_cpu: "emscripten"
+
 toolchain {
     toolchain_identifier: "emscripten-toolchain"
     host_system_name: "i686-unknown-linux-gnu"
@@ -20,7 +21,7 @@ toolchain {
     }
     tool_path {
         name: "ar"
-        path: "/bin/false"
+        path: "emar.sh"
     }
     tool_path {
         name: "cpp"
@@ -43,13 +44,28 @@ toolchain {
         path: "/bin/false"
     }
 
-    compiler_flag: "-isystem"
-    compiler_flag: "external/emscripten_toolchain/system/include/libcxx"
-    compiler_flag: "-isystem"
-    compiler_flag: "external/emscripten_toolchain/system/include/libc"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/include/libcxx"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/lib/libcxxabi/include"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/include/compat"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/include"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/include/SSE"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/include/libc"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/lib/libc/musl/arch/emscripten"
+    unfiltered_cxx_flag: "-isystem"
+    unfiltered_cxx_flag: "external/emscripten_toolchain/system/local/include"
     
     # Turn off exceptions since emscripten has issues catching them
     compiler_flag: "-fno-exceptions"
+
+    unfiltered_cxx_flag: "-no-canonical-prefixes"
+    linker_flag: "-no-canonical-prefixes"
 
     # Make C++ compilation deterministic. Use linkstamping instead of these
     # compiler symbols.
@@ -66,10 +82,16 @@ toolchain {
     linker_flag: "-Wl,--build-id=md5"
     linker_flag: "-Wl,--hash-style=gnu"
   
+    cxx_flag: "-std=c++0x"
+    compiler_flag: "-ffunction-sections"
+    compiler_flag: "-fdata-sections"
+    linker_flag: "-Wl,--gc-sections"
+
     compilation_mode_flags {
       mode: DBG
       # Enable debug symbols.
       compiler_flag: "-g"
+      linker_flag: "-g"
     }
     compilation_mode_flags {
       mode: FASTBUILD
@@ -87,12 +109,10 @@ toolchain {
       linker_flag: "-g0"
       compiler_flag: "-Oz"
       linker_flag: "-Oz"
-  
+      linker_flag: "--closure"
+      linker_flag: "1"
+
       # Disable assertions
       compiler_flag: "-DNDEBUG"
     }
-}
-default_toolchain {
-    cpu: "emscripten"
-    toolchain_identifier: "emscripten-toolchain"
 }

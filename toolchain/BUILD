@@ -1,22 +1,27 @@
-package(default_visibility = ['//visibility:public'])
+package(default_visibility = ["//visibility:public"])
 
-cc_toolchain_suite(name = "emscripten",
+exports_files(["test.sh"])
+
+cc_toolchain_suite(
+    name = "emscripten",
     toolchains = {
-        "emscripten|emscripten":"emscripten_toolchain",
-    }
+        "emscripten|emscripten": "emscripten_toolchain",
+    },
 )
 
 filegroup(name = "empty")
+
 filegroup(
     name = "all",
-    srcs = [ 
+    srcs = [
+        "emar.sh",
         "emcc.sh",
         "@emscripten_toolchain//:all",
+        ":emscripten_cache_content",
         "@emscripten_clang//:all",
         "@nodejs//:node/bin/node",
-        ":emscripten_cache_content",
     ],
- )
+)
 
 filegroup(
     name = "emscripten_cache_content",

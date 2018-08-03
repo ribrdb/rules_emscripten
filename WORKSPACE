@@ -1,3 +1,5 @@
+workspace(name="rules_emscripten")
+
 new_http_archive(
     name = 'emscripten_toolchain',
     url = 'https://github.com/kripken/emscripten/archive/1.38.6.tar.gz',
